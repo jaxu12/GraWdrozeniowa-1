@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "D:\\studia\\6 semestr\\Projket wdro\u017Ceniowy\\unity\\GraWdrozeniowa-main\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\studia\\6 semestr\\Projket wdro\u017Ceniowy\\unity\\GraWdrozeniowa-main\\Library\\PackageCache\\com.unity.ugui@d8a2716f3013\\Runtime\\TMP\\TextMeshProUGUI.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.unity.ugui@d8a2716f3013\\Runtime\\TMP\\TextMeshProUGUI.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|d:\\studia\\6 semestr\\projket wdro\u017Ceniowy\\unity\\grawdrozeniowa-main\\assets\\scripts\\bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -23,19 +19,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TextMeshProUGUI.cs",
-              "DocumentMoniker": "D:\\studia\\6 semestr\\Projket wdro\u017Ceniowy\\unity\\GraWdrozeniowa-main\\Library\\PackageCache\\com.unity.ugui@d8a2716f3013\\Runtime\\TMP\\TextMeshProUGUI.cs",
-              "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.ugui@d8a2716f3013\\Runtime\\TMP\\TextMeshProUGUI.cs",
-              "ToolTip": "D:\\studia\\6 semestr\\Projket wdro\u017Ceniowy\\unity\\GraWdrozeniowa-main\\Library\\PackageCache\\com.unity.ugui@d8a2716f3013\\Runtime\\TMP\\TextMeshProUGUI.cs",
-              "RelativeToolTip": "Library\\PackageCache\\com.unity.ugui@d8a2716f3013\\Runtime\\TMP\\TextMeshProUGUI.cs",
-              "ViewState": "AgIAAMcHAAAAAAAAAAAqwNsHAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-12T16:02:45.586Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Bullet.cs",
               "DocumentMoniker": "D:\\studia\\6 semestr\\Projket wdro\u017Ceniowy\\unity\\GraWdrozeniowa-main\\Assets\\Scripts\\Bullet.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Bullet.cs",

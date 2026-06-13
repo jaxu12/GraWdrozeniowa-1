@@ -1,26 +1,44 @@
 using UnityEngine;
+using TMPro;
 
 public class Health : MonoBehaviour
 {
-    public int hp = 1;
+    public int hp = 5;
+    public TextMeshProUGUI lifeText;
+
+    private void Start()
+    {
+        UpdateLifeText();
+    }
 
     public void TakeDamage(int damage)
     {
         hp -= damage;
-
-        Debug.Log(gameObject.name + " HP = " + hp + " FRAME=" + Time.frameCount);
+        UpdateLifeText();
 
         if (hp <= 0)
         {
-            Debug.Log(gameObject.name + " UMIERA");
-
-            // !!! NOWA LINIJKA – DODAJEMY PUNKT DO WYNIKU !!!
-            if (GameManager.Instance != null)
+            // Sprawdzamy, czy ten obiekt ma tag Player
+            if (gameObject.CompareTag("Player"))
             {
-                GameManager.Instance.AddPoint();
+                Debug.Log("URUCHOMIONO SMIERC: Padl GRACZ!");
+                Time.timeScale = 0f; // Zamraża grę tylko po śmierci gracza
             }
+            else
+            {
+                // Jeśli to potwór stracił HP, po prostu go kasujemy ze sceny!
+                Debug.Log("URUCHOMIONO SMIERC: Padl POTWOR " + gameObject.name);
+                Destroy(gameObject); 
+            }
+        }
+    }
 
-            gameObject.SetActive(false);
+    private void UpdateLifeText()
+    {
+        // Aktualizujemy tekst tylko jeśli skrypt należy do gracza i ma podpięte UI
+        if (gameObject.CompareTag("Player") && lifeText != null)
+        {
+            lifeText.text = "Zycia: " + hp;
         }
     }
 }

@@ -1,68 +1,59 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : MonoBehaviour
 {
     public float speed = 15f;
     public int damage = 1;
     public float lifeTime = 3f;
 
-    private Vector2 direction;
     private Rigidbody2D rb;
-    private Collider2D myCollider;
+    private Vector2 moveDirection = Vector2.right; // Domyślny kierunek
 
-    private void Awake()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<Collider2D>();
         
-        rb.gravityScale = 0f; 
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-        // Wymuszenie warstwy pocisków
-        gameObject.layer = LayerMask.NameToLayer("Pociski");
+        // Nadajemy prędkość w kierunku, który przekazał PlayerMovement
+        if (rb != null)
+        {
+            rb.linearVelocity = moveDirection * speed;
+        }
+        
+        Destroy(gameObject, lifeTime);
     }
 
-    public void SetDirection(Vector2 dir)
+    // Ta funkcja naprawi błąd w PlayerMovement.cs!
+    public void SetDirection(Vector2 direction)
     {
-        direction = dir.normalized;
-        rb.linearVelocity = direction * speed;
-        Destroy(gameObject, lifeTime);
+        moveDirection = direction.normalized;
+
+        // Jeśli strzała ma lecieć w lewo, obracamy jej sprite, żeby nie leciała tyłem
+        float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        HandleHit(collision.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Ignorowanie gracza
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Physics2D.IgnoreCollision(myCollider, collision.collider);
-            return;
-        }
+        HandleHit(collision.gameObject);
+    }
 
-        // Trafienie wroga
-        if (collision.gameObject.CompareTag("Enemy"))
+    private void HandleHit(GameObject hitObject)
+    {
+        // Trafiamy TYLKO potwory
+        if (hitObject.CompareTag("Enemy"))
         {
-            Health enemyHealth = collision.gameObject.GetComponent<Health>();
+            Health enemyHealth = hitObject.GetComponent<Health>();
             if (enemyHealth != null)
             {
-                // Zadajemy obrażenia Twoją funkcją
-                enemyHealth.TakeDamage(damage);
-
-                // SPRAWDZAMY TWÓJ WARUNEK ŚMIERCI:
-                // Sprawdzamy czy Twoje 'hp' spadło do zera LUB czy potwór został wygaszony (SetActive(false))
-                if (enemyHealth.hp <= 0 || !collision.gameObject.activeSelf)
-                {
-                    Destroy(gameObject); // Strzała natychmiast znika, bo potwór nie żyje
-                    return; 
-                }
+                enemyHealth.TakeDamage(damage); 
             }
 
-            // JEŚLI POTWÓR PRZEŻYŁ:
-            // Strzała wyłącza collider i leci ranić kolejnych wrogów w hordzie
-            if (myCollider != null)
-            {
-                myCollider.enabled = false;
-            }
+            Destroy(gameObject); // Strzała znika po trafieniu wroga
         }
     }
 }

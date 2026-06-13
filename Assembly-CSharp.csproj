@@ -86,6 +86,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Base\Joystick.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\Scripts\EnemyAttack.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickPlayerExample.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
