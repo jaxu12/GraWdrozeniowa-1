@@ -1,23 +1,32 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseMenuUI;
-    [SerializeField] private Button pauseButton;
-    [SerializeField] private Button resumeButton;
-    [SerializeField] private Button restartButton;
-    [SerializeField] private Button mainMenuButton;
+    public static PauseMenu Instance { get; private set; }
+
     [SerializeField] private string mainMenuSceneName = "Main";
 
-    private bool isPaused = false;
+    public bool IsPaused => isPaused;
+
+    private bool isPaused;
+    private bool isGameOver;
+    private PlayerHudController hud;
 
     private void Awake()
     {
-        AutoAssignButtons();
-        BindButtons();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        hud = FindAnyObjectByType<PlayerHudController>();
     }
 
     private void Start()
@@ -25,39 +34,57 @@ public class PauseMenu : MonoBehaviour
         SetPaused(false);
     }
 
-    private void OnDestroy()
-    {
-        UnbindButtons();
-        Time.timeScale = 1f;
-    }
-
     private void Update()
     {
+        if (isGameOver)
+        {
+            return;
+        }
+
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             TogglePause();
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+
+        Time.timeScale = 1f;
+    }
+
     public void Pause()
     {
+        if (isGameOver)
+        {
+            return;
+        }
+
         SetPaused(true);
     }
 
     public void Resume()
     {
+        if (isGameOver)
+        {
+            return;
+        }
+
         SetPaused(false);
     }
 
     public void TogglePause()
     {
-        if (isPaused)
+        if (isGameOver)
         {
-            Resume();
             return;
         }
 
-        Pause();
+        SetPaused(!isPaused);
     }
 
     public void RestartLevel()
@@ -73,110 +100,32 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
+    public void ShowGameOver()
+    {
+        isGameOver = true;
+        SetPaused(false);
+    }
+
     private void SetPaused(bool paused)
     {
         isPaused = paused;
         Time.timeScale = paused ? 0f : 1f;
 
-        if (pauseMenuUI != null)
+        if (hud == null)
         {
-            pauseMenuUI.SetActive(paused);
-            return;
+            hud = FindAnyObjectByType<PlayerHudController>();
         }
 
-        Debug.LogError("PauseMenu: pauseMenuUI is not assigned.", this);
-    }
-
-    private void AutoAssignButtons()
-    {
-        if (pauseButton == null)
+        if (hud != null)
         {
-            pauseButton = FindButtonByName("Pause");
-        }
-
-        if (resumeButton == null)
-        {
-            resumeButton = FindButtonByName("Resume");
-        }
-
-        if (restartButton == null)
-        {
-            restartButton = FindButtonByName("Restart");
-        }
-
-        if (mainMenuButton == null)
-        {
-            mainMenuButton = FindButtonByName("MainMenu");
-        }
-    }
-
-    private Button FindButtonByName(string buttonName)
-    {
-        Scene activeScene = SceneManager.GetActiveScene();
-
-        foreach (GameObject root in activeScene.GetRootGameObjects())
-        {
-            Button[] buttons = root.GetComponentsInChildren<Button>(true);
-
-            foreach (Button button in buttons)
+            if (paused)
             {
-                if (button.name == buttonName)
-                {
-                    return button;
-                }
+                hud.ShowPauseMenu();
             }
-        }
-
-        return null;
-    }
-
-    private void BindButtons()
-    {
-        if (pauseButton != null)
-        {
-            pauseButton.onClick.RemoveListener(TogglePause);
-            pauseButton.onClick.AddListener(TogglePause);
-        }
-
-        if (resumeButton != null)
-        {
-            resumeButton.onClick.RemoveListener(Resume);
-            resumeButton.onClick.AddListener(Resume);
-        }
-
-        if (restartButton != null)
-        {
-            restartButton.onClick.RemoveListener(RestartLevel);
-            restartButton.onClick.AddListener(RestartLevel);
-        }
-
-        if (mainMenuButton != null)
-        {
-            mainMenuButton.onClick.RemoveListener(LoadMainMenu);
-            mainMenuButton.onClick.AddListener(LoadMainMenu);
-        }
-    }
-
-    private void UnbindButtons()
-    {
-        if (pauseButton != null)
-        {
-            pauseButton.onClick.RemoveListener(TogglePause);
-        }
-
-        if (resumeButton != null)
-        {
-            resumeButton.onClick.RemoveListener(Resume);
-        }
-
-        if (restartButton != null)
-        {
-            restartButton.onClick.RemoveListener(RestartLevel);
-        }
-
-        if (mainMenuButton != null)
-        {
-            mainMenuButton.onClick.RemoveListener(LoadMainMenu);
+            else
+            {
+                hud.HidePauseMenu();
+            }
         }
     }
 }
